@@ -1,0 +1,12 @@
+apiVersion: apps.luojun96.io/v1beta1
+kind: CustomDeamonset
+metadata:
+  labels:
+    app.kubernetes.io/name: customdeamonset
+    app.kubernetes.io/instance: customdeamonset-sample
+    app.kubernetes.io/part-of: k8s-operator-opt
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: k8s-operator-opt
+  name: customdeamonset-sample
+spec:
+  # TODO(user): Add fields here
