@@ -18,13 +18,16 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	appsv1beta1 "github.com/luojun96/k8s-operator-opt/api/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // CustomDeamonsetReconciler reconciles a CustomDeamonset object
@@ -48,8 +51,41 @@ type CustomDeamonsetReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.1/pkg/reconcile
 func (r *CustomDeamonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
+	cds := &appsv1beta1.CustomDeamonset{}
+	if err := r.Get(ctx, req.NamespacedName, cds); err != nil {
+		fmt.Println(err)
+	}
 
-	// TODO(user): your logic here
+	if cds.Spec.Image != "" {
+		nodeList := &v1.NodeList{}
+		if err := r.List(ctx, nodeList); err != nil {
+			fmt.Println(err)
+		}
+		for _, node := range nodeList.Items {
+			p := v1.Pod{
+				TypeMeta: metav1.TypeMeta{
+					APIVersion: "v1",
+					Kind:       "Pod",
+				},
+				ObjectMeta: metav1.ObjectMeta{
+					GenerateName: fmt.Sprintf("%s-", node.Name),
+					Namespace:    cds.Namespace,
+				},
+				Spec: v1.PodSpec{
+					Containers: []v1.Container{
+						{
+							Image: cds.Spec.Image,
+							Name:  "custom-container",
+						},
+					},
+					NodeName: node.Name,
+				},
+			}
+			if err := r.Create(ctx, &p); err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
 
 	return ctrl.Result{}, nil
 }
