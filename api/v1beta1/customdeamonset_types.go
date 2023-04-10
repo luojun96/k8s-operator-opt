@@ -28,7 +28,7 @@ type CustomDeamonsetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of CustomDeamonset. Edit customdeamonset_types.go to remove/update
+	// Image is an field of CustomDeamonset. Edit customdeamonset_types.go to remove/update
 	Image string `json:"image,omitempty"`
 }
 
