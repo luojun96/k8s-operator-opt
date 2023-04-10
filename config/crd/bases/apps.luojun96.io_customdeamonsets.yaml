@@ -36,7 +36,7 @@ spec:
             description: CustomDeamonsetSpec defines the desired state of CustomDeamonset
             properties:
               image:
-                description: Foo is an example field of CustomDeamonset. Edit customdeamonset_types.go
+                description: Image is an field of CustomDeamonset. Edit customdeamonset_types.go
                   to remove/update
                 type: string
             type: object
