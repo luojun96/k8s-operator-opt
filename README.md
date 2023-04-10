@@ -1,4 +1,3 @@
-# k8s-operator-opt
 ## Generate Operator by KubeBuilder
 ### Create a kubebuilder project, which requires an empty folder
 ```sh
@@ -99,4 +98,3 @@ kubebuilder create webhook --group apps --version v1beta1 --kind CustomDaemonset
 ### Enable webhook in `config/default/kustomization.yaml`
 
 ### Redeploy
-### Enable webhook in `config/default/kustomization.yaml`
