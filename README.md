@@ -1,10 +1,16 @@
+# Kubernetes Operator Action
+
 ## Generate Operator by KubeBuilder
+
 ### Create a kubebuilder project, which requires an empty folder
-```sh
+
+```bash
 kubebuilder init --domain luojun96.io
 ```
+
 ### Check project layout
-```sh
+
+```bash
 cat PROJECT
 domain: luojun96.io
 layout:
@@ -23,21 +29,26 @@ resources:
   version: v1beta1
 version: "3"
 ```
+
 ### Create API, create resource[Y], create controller[Y]
-```sh
+
+```bash
 kubebuilder create api --group apps --version v1beta1 --kind CustomDeamonset
 ```
+
 ### Open project with IDE and edit `api/v1alpha1/simplestatefulset_types.go`
 
 ### Finish custom logic
+
 ```go
 // controllers/customdeamonset_controller.go
 func (r *CustomDeamonsetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+  _ = log.FromContext(ctx)
   // TO-DO
-	return ctrl.Result{}, nil
+  return ctrl.Result{}, nil
 }
 ```
+
 ### Check Makefile
 
 ```makefile
@@ -57,6 +68,7 @@ Build targets:
 ```
 
 ### Edit `controllers/mydaemonset_controller.go`, add permissions to the controller
+
 ```go
 //+kubebuilder:rbac:groups=apps.cncamp.io,resources=mydaemonsets/finalizers,verbs=update
 // Add the following
@@ -66,13 +78,13 @@ Build targets:
 
 ### Generate crd
 
-```sh
+```bash
 make manifests
 ```
 
 ### Build & install
 
-```sh
+```bash
 make build
 make docker-build
 make docker-push
@@ -83,18 +95,16 @@ make deploy
 
 ### Install cert-manager
 
-```sh
+```bash
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.1/cert-manager.yaml
 ```
 
 ### Create webhooks
 
-```sh
+```bash
 kubebuilder create webhook --group apps --version v1beta1 --kind CustomDaemonset --defaulting --programmatic-validation
 ```
 
 ### Change code
 
 ### Enable webhook in `config/default/kustomization.yaml`
-
-### Redeploy
